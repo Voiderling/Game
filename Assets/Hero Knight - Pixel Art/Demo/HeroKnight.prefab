@@ -168,10 +168,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_speed: 10
-  m_jumpForce: 15
+  m_jumpForce: 16
   m_rollForce: 15
   m_noBlood: 0
   m_slideDust: {fileID: 1038168246061390451, guid: 8b8c8cc6774fb074cb9139cc631b108e, type: 3}
+  attackSound: {fileID: 8300000, guid: 2279910d44144714082a1c9c09448a58, type: 3}
+  jumpSound: {fileID: 8300000, guid: 6d0ccdcb3081e3b499d0a1d20d710811, type: 3}
+  shieldSound: {fileID: 8300000, guid: a7f0b500591f12e43a052a8e9ecbe843, type: 3}
+  rollSound: {fileID: 8300000, guid: c95e258979222dc439707fef1f587804, type: 3}
   attackPoint: {fileID: 5807459544197723785}
   attackRange: 1.8
   attackDamage: 1
@@ -343,6 +347,8 @@ MonoBehaviour:
   startingHealth: 10
   iFramesDuration: 2
   numberOfFlashes: 3
+  hurtSound: {fileID: 8300000, guid: da86fedbc4f81464b987b78c2e55364e, type: 3}
+  deathSound: {fileID: 8300000, guid: 580275fde3488ce4ea977f10651706fc, type: 3}
   components: []
 --- !u!1 &7087049454815086010
 GameObject:

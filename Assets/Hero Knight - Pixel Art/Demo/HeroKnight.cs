@@ -26,10 +26,13 @@ public class HeroKnight : MonoBehaviour
     private float m_delayToIdle = 0.0f;
     private float m_rollDuration = 8.0f / 14.0f;
     private float m_rollCurrentTime;
-    private Enhancedskeleton _enhancedSkeleton;
+    private EnhancedSkeleton _enhancedSkeleton;
     private bool m_isBlocking = false;
     private bool m_isRolling = false;
-
+    [SerializeField]    private AudioClip attackSound;
+    [SerializeField]    private AudioClip jumpSound;
+    [SerializeField]    private AudioClip shieldSound;
+    [SerializeField] private AudioClip rollSound;
 
 
     public Rigidbody2D SetRigidbody2D()
@@ -47,7 +50,7 @@ public class HeroKnight : MonoBehaviour
         m_wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
-        _enhancedSkeleton = GetComponent<Enhancedskeleton>();
+        _enhancedSkeleton = GetComponent<EnhancedSkeleton>();
     }
 
     // Update is called once per frame
@@ -67,7 +70,7 @@ public class HeroKnight : MonoBehaviour
             m_rolling = false;
             m_isInvulnerable = false;
             m_rollCurrentTime = 0;
-        }
+        }   
 
 
         //Check if character just landed on the ground
@@ -113,27 +116,17 @@ public class HeroKnight : MonoBehaviour
         m_animator.SetBool("WallSlide", m_isWallSliding);
 
         //Death
-        if (Input.GetKeyDown("e") && !m_rolling)
-        {
-            m_animator.SetBool("noBlood", m_noBlood);
-            m_animator.SetTrigger("Death");
-        }
-
-        //Hurt
-        else if (Input.GetKeyDown("q") && !m_rolling)
-            m_animator.SetTrigger("Hurt");
-
         //Attack
-        else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
+        if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
-            Attack();
+            
+            SoundManager.instance.PlaySound(attackSound);
             m_currentAttack++;
-
-
             // Loop back to one after third attack
-            if (m_currentAttack > 3)
+            if (m_currentAttack > 3) { 
                 m_currentAttack = 1;
-
+            }
+           
             // Reset Attack combo if time since last attack is too large
             if (m_timeSinceAttack > 1.0f)
                 m_currentAttack = 1;
@@ -143,13 +136,16 @@ public class HeroKnight : MonoBehaviour
 
             // Reset timer
             m_timeSinceAttack = 0.0f;
+            Attack();
         }
 
         // Block
         else if (Input.GetMouseButtonDown(1) && !m_rolling)
         {
+       
             m_animator.SetTrigger("Block");
             m_animator.SetBool("IdleBlock", true);
+            SoundManager.instance.PlaySound(shieldSound);
             m_isBlocking = true;
         }
 
@@ -164,6 +160,7 @@ public class HeroKnight : MonoBehaviour
             m_rolling = true;
             m_isInvulnerable = true;
             m_animator.SetTrigger("Roll");
+            SoundManager.instance.PlaySound(rollSound);
             m_body2d.linearVelocity = new Vector2(m_facingDirection * m_rollForce, m_body2d.linearVelocity.y);
         }
 
@@ -171,6 +168,7 @@ public class HeroKnight : MonoBehaviour
         //Jump
         else if (Input.GetKeyDown("space") && m_grounded && !m_rolling)
         {
+            SoundManager.instance.PlaySound(jumpSound);
             m_animator.SetTrigger("Jump");
             m_grounded = false;
             m_animator.SetBool("Grounded", m_grounded);
@@ -235,7 +233,10 @@ public class HeroKnight : MonoBehaviour
     {
         return m_isInvulnerable;
     }
-
+    public AudioClip GetShieldSound()
+    {
+        return shieldSound;
+    }
     [Header("Attack Settings")]
     [SerializeField] private Transform attackPoint;  // Set this in the Inspector.
     [SerializeField] private float attackRange = 0.5f;

@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class HeroKnightDealDamage : MonoBehaviour
 {
-    private Enhancedskeleton enhancedSkeleton;
+    private EnhancedSkeleton enhancedSkeleton;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
-        enhancedSkeleton = GetComponent<Enhancedskeleton>();
+        enhancedSkeleton = GetComponent<EnhancedSkeleton>();
     }
     void Start()
     {
